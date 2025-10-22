@@ -1,0 +1,41 @@
+services:
+  coordinator:
+    build:
+      context: .
+      dockerfile: ./agents/coordinator_agent/Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - diagnosis
+      - knowledge
+      - imaging
+
+  diagnosis:
+    build:
+      context: .
+      dockerfile: ./agents/diagnosis_agent/Dockerfile
+    ports:
+      - "8001:8001"
+
+  knowledge:
+    build:
+      context: .
+      dockerfile: ./agents/knowledge_agent/Dockerfile
+    ports:
+      - "8002:8002"
+
+  imaging:
+    build:
+      context: .
+      dockerfile: ./agents/imaging_agent/Dockerfile
+    ports:
+      - "8003:8003"
+
+  ui:
+    build:
+      context: .
+      dockerfile: ./ui/Dockerfile
+    ports:
+      - "8501:8501"
+    depends_on:
+      - coordinator
