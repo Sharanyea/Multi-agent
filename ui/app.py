@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import uvicorn
 
 st.title("🩺 Multi-Agent Breast Cancer Diagnosis System")
 
@@ -10,8 +11,9 @@ if uploaded_file:
 
 if st.button("Run Diagnosis"):
     try:
-        response = requests.get("http://localhost:8000/diagnose").json()
+        response = requests.get("http://localhost:5010/diagnose").json()
         st.subheader("Diagnosis Results")
         st.json(response)
     except Exception as e:
         st.error(f"Error: {e}")
+

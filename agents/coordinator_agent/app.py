@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import requests
+import uvicorn
 
 app = FastAPI()
 
@@ -11,13 +12,16 @@ def root():
 def diagnose():
     try:
         # Step 1: Ask Imaging Agent for preprocessing
-        img_result = requests.get("http://imaging:8003/process").json()
+        print( "Requesting imaging agent..." )
+        img_result = requests.get("http://localhost:5008/process").json()
+        print(img_result)
+
 
         # Step 2: Ask Knowledge Agent for context
-        knowledge = requests.get("http://knowledge:8002/query?symptom=Microcalcification").json()
+        knowledge = requests.get("http://localhost:5009/query?symptom=Microcalcification").json()
 
         # Step 3: Ask Diagnosis Agent for prediction
-        diagnosis = requests.get("http://diagnosis:8001/predict").json()
+        diagnosis = requests.get("http://localhost:5007/predict").json()
 
         return {
             "image_result": img_result,
@@ -27,3 +31,7 @@ def diagnose():
 
     except Exception as e:
         return {"error": str(e)}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=5010)  # Set your port here
